@@ -3,13 +3,15 @@ require('dotenv').config();
 
 const sequelize = require('./util/database');
 
-const usersRouter = require('./routes/user');
+const usersRouters = require('./routes/user');
+const employeesRouters = require('./routes/employee');
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/api/users', usersRouter);
+app.use('/api/users', usersRouters);
+app.use('/api/employees', employeesRouters);
 
 const PORT = process.env.PORT_NUMBER || 3030;
 sequelize
