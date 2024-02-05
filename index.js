@@ -6,6 +6,10 @@ const sequelize = require('./util/database');
 const usersRouters = require('./routes/user');
 const employeesRouters = require('./routes/employee');
 
+require('./models/user');
+require('./models/employee');
+require('./models/leave');
+
 const app = express();
 
 app.use(express.json());
