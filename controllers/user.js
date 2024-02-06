@@ -1,11 +1,12 @@
 const User = require('../models/user');
+const HttpError = require('../models/http-error');
 
 exports.getUserById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const user = await User.findByPk(id);
     if (!user) {
-      return res.status(404).json({ message: 'The user not found' });
+      return next(new HttpError('The user not found', 404));
     }
 
     res.status(200).json(user);
@@ -18,7 +19,7 @@ exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await User.findAll();
     if (users.length === 0) {
-      return res.status(404).json({ message: 'There is no user found' });
+      return next(new HttpError('There is no user found', 404));
     }
 
     res.status(200).json(users);
@@ -34,7 +35,7 @@ exports.addUser = async (req, res, next) => {
     const createdUser = await User.create(user);
 
     if (!createdUser) {
-      return res.status(500).json({ message: 'There is an error occurs' });
+      return next(new HttpError('There is an error occurs', 500));
     }
 
     res.status(201).json({ message: 'The user was created successfully' });
@@ -51,7 +52,7 @@ exports.updateUser = async (req, res, next) => {
     const user = await User.findByPk(id);
 
     if (!user) {
-      return res.status(404).json({ message: 'The user not found' });
+      return next(new HttpError('The user not found', 404));
     }
 
     await user.update({ ...updatedUser });
@@ -70,7 +71,7 @@ exports.deleteUser = async (req, res, next) => {
     const user = await User.findByPk(id);
 
     if (!user) {
-      return res.status(404).json({ message: 'The user not found' });
+      return next(new HttpError('The user not found', 404));
     }
 
     await user.destroy();

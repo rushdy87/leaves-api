@@ -7,9 +7,12 @@ const usersRouters = require('./routes/user');
 const employeesRouters = require('./routes/employee');
 const leavesRouters = require('./routes/leave');
 
-require('./models/user');
-require('./models/employee');
-require('./models/leave');
+const { handleErrors } = require('./middlewares/error-handling');
+const { unsupportedRoutes } = require('./middlewares/unsupported-routes');
+
+// require('./models/user');
+// require('./models/employee');
+// require('./models/leave');
 
 const app = express();
 
@@ -18,6 +21,12 @@ app.use(express.json());
 app.use('/api/users', usersRouters);
 app.use('/api/employees', employeesRouters);
 app.use('/api/leaves', leavesRouters);
+
+// UnsupportedRoutes
+app.use(unsupportedRoutes);
+
+// Handling Errors
+app.use(handleErrors);
 
 const PORT = process.env.PORT_NUMBER || 3030;
 sequelize
