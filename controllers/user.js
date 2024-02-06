@@ -44,6 +44,27 @@ exports.addUser = async (req, res, next) => {
   }
 };
 
+exports.login = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { username, password } });
+
+    if (!user) {
+      return next(
+        new HttpError(
+          'Could not identify user, credenials seem to be wrong',
+          401
+        )
+      );
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.updateUser = async (req, res, next) => {
   const { id } = req.params;
   const updatedUser = req.body;
