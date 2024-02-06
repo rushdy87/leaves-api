@@ -13,9 +13,9 @@ router.get('/waiting-leaves', leaveController.getWaitingLeaves);
 router.put('/:id', leaveController.updateLeave);
 
 // ذني للمانجر ليفل بس..
-router.put('/send-to-print/:id', leaveController.sendToPrint);
-router.put('/send-all-to-print', leaveController.sendAllToPrint);
-router.put('/rejecte-leave/:id', leaveController.rejecteLeave);
+router.put('/print/send-to-print/:id', leaveController.sendToPrint);
+router.put('/print/send-all-to-print', leaveController.sendAllToPrint);
+router.put('/print/rejecte-leave/:id', leaveController.rejecteLeave);
 
 // after print
 router.put('/printing-leave/:id', leaveController.printingLeave);

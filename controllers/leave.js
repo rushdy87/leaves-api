@@ -71,7 +71,7 @@ exports.sendToPrint = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const leave = Leave.findByPk(id);
+    const leave = await Leave.findByPk(id);
 
     if (!leave) {
       return res.status(404).json({ message: 'The is no leaves' });
@@ -90,6 +90,8 @@ exports.sendToPrint = async (req, res, next) => {
 exports.sendAllToPrint = async (req, res, next) => {
   try {
     const leaves = await Leave.findAll({ where: { status: 'wait' } });
+
+    console.log(leaves);
 
     if (leaves.length === 0) {
       return res.status(404).json({ message: 'There are no leaves' });
