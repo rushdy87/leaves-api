@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const HttpError = require('../models/http-error');
@@ -98,7 +99,13 @@ exports.login = async (req, res, next) => {
       );
     }
 
-    res.status(200).json(user);
+    const token = jwt.sign(
+      { userId: user.id, username: user.username },
+      process.env.JWT_PRIVATE_KEY,
+      { expiresIn: 60 * 15 }
+    );
+
+    res.status(200).json({ userId: user.id, username: user.username, token });
   } catch (error) {
     return next(
       new HttpError('Something went wrong, could not log in right now.'),
