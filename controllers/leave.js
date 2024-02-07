@@ -3,6 +3,12 @@ const HttpError = require('../models/http-error');
 
 exports.addLeave = async (req, res, next) => {
   const newLeave = req.body;
+
+  // Working in the future..
+  if (newLeave.status) {
+    return next(new HttpError('This process not allowd.'), 401);
+  }
+
   try {
     const leave = await Leave.create(newLeave);
 

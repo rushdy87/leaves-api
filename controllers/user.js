@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/user');
 const HttpError = require('../models/http-error');
 
@@ -35,10 +37,27 @@ exports.getAllUsers = async (req, res, next) => {
 };
 
 exports.addUser = async (req, res, next) => {
-  const user = req.body;
+  const { name, username, password, role } = req.body;
 
   try {
-    const createdUser = await User.create(user);
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser) {
+      return next(
+        new HttpError(
+          'The user is already exist, please create choose another username.',
+          500
+        )
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const createdUser = await User.create({
+      name,
+      username,
+      password: hashedPassword,
+      role,
+    });
 
     if (!createdUser) {
       return next(new HttpError('There is an error occurs', 500));
@@ -57,9 +76,20 @@ exports.login = async (req, res, next) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { username, password } });
+    const user = await User.findOne({ where: { username } });
 
     if (!user) {
+      return next(
+        new HttpError(
+          'Could not identify user, credenials seem to be wrong',
+          401
+        )
+      );
+    }
+
+    let isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
       return next(
         new HttpError(
           'Could not identify user, credenials seem to be wrong',
