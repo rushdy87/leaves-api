@@ -1,8 +1,11 @@
 const expres = require('express');
 
 const leaveController = require('../controllers/leave');
+const checkAuth = require('../middlewares/check-auth');
 
 const router = expres.Router();
+
+router.use(checkAuth);
 
 router.post('/', leaveController.addLeave);
 

@@ -1,8 +1,11 @@
 const expres = require('express');
 
 const employeesController = require('../controllers/employee');
+const checkAuth = require('../middlewares/check-auth');
 
 const router = expres.Router();
+
+router.use(checkAuth);
 
 router.get('/:id', employeesController.getEmployeeById);
 

@@ -105,7 +105,14 @@ exports.login = async (req, res, next) => {
       { expiresIn: 60 * 15 }
     );
 
-    res.status(200).json({ userId: user.id, username: user.username, token });
+    res
+      .status(200)
+      .json({
+        userId: user.id,
+        username: user.username,
+        role: user.role,
+        token,
+      });
   } catch (error) {
     return next(
       new HttpError('Something went wrong, could not log in right now.'),
