@@ -18,7 +18,7 @@ router.put('/print/send-all-to-print', leaveController.sendAllToPrint);
 router.put('/print/rejecte-leave/:id', leaveController.rejecteLeave);
 
 // after print
-router.put('/printing-leave/:id', leaveController.printingLeave);
-// router.put('/printing-leave', leaveController.printingAllLeave);
+router.put('/print/printing-leave/:id', leaveController.printingLeave);
+router.put('/print/printing-all-leaves', leaveController.printingAllLeave);
 
 module.exports = router;

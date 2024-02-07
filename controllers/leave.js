@@ -1,4 +1,5 @@
 const Leave = require('../models/leave');
+const HttpError = require('../models/http-error');
 
 exports.addLeave = async (req, res, next) => {
   const newLeave = req.body;
@@ -193,19 +194,24 @@ exports.printingLeave = async (req, res, next) => {
   }
 };
 
-// exports.printingAllLeave = async (req, res, next) => {
-//   try {
-//     const leaves = await Leave.findAll({ where: { status: 'wait' } });
+exports.printingAllLeave = async (req, res, next) => {
+  try {
+    const leaves = await Leave.findAll({ where: { status: 'accepted' } });
 
-//     if (leaves.length === 0) {
-//       return res.status(404).json({ message: 'There are no leaves' });
-//     }
-//     await Leave.update({ status: 'accepted' }, { where: { status: 'wait' } });
+    if (leaves.length === 0) {
+      return next(new HttpError('There is no leave right now.', 404));
+    }
+    await Leave.update({ status: 'finsh' }, { where: { status: 'accepted' } });
 
-//     return res
-//       .status(200)
-//       .json({ message: 'All leaves have been updated to "accepted" status' });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+    return res
+      .status(200)
+      .json({ message: 'All leaves have been updated to "accepted" status' });
+  } catch (error) {
+    return next(
+      new HttpError(
+        'Something went wrong, could not update any leave right now.'
+      ),
+      500
+    );
+  }
+};
