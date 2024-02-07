@@ -11,7 +11,10 @@ exports.getUserById = async (req, res, next) => {
 
     res.status(200).json(user);
   } catch (error) {
-    console.log(error);
+    return next(
+      new HttpError('Something went wrong, could not find user right now.'),
+      500
+    );
   }
 };
 
@@ -24,7 +27,10 @@ exports.getAllUsers = async (req, res, next) => {
 
     res.status(200).json(users);
   } catch (error) {
-    console.log(error);
+    return next(
+      new HttpError('Something went wrong, could not find users right now.'),
+      500
+    );
   }
 };
 
@@ -40,7 +46,10 @@ exports.addUser = async (req, res, next) => {
 
     res.status(201).json({ message: 'The user was created successfully' });
   } catch (error) {
-    console.log(error);
+    return next(
+      new HttpError('Something went wrong, could not create a user right now.'),
+      500
+    );
   }
 };
 
@@ -61,7 +70,10 @@ exports.login = async (req, res, next) => {
 
     res.status(200).json(user);
   } catch (error) {
-    console.log(error);
+    return next(
+      new HttpError('Something went wrong, could not log in right now.'),
+      500
+    );
   }
 };
 
@@ -82,7 +94,10 @@ exports.updateUser = async (req, res, next) => {
 
     res.status(200).json(user);
   } catch (error) {
-    console.log(error);
+    return next(
+      new HttpError('Something went wrong, could not update a user right now.'),
+      500
+    );
   }
 };
 
@@ -99,6 +114,9 @@ exports.deleteUser = async (req, res, next) => {
 
     res.status(200).json({ message: 'The user was deleted successfully' });
   } catch (error) {
-    console.log(error);
+    return next(
+      new HttpError('Something went wrong, could not delete a user right now.'),
+      500
+    );
   }
 };
