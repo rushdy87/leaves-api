@@ -1,22 +1,29 @@
-const { handleErrors } = require('./error-handling');
 const { ROLE } = require('../util/roles');
+const HttpError = require('../models/http-error');
 
 module.exports =
   (requiredRole = ROLE.BASIC) =>
   (req, res, next) => {
+    console.log(requiredRole);
     try {
       const userRole = +req.userData.role;
 
-      if (userRole === ROLE.ADMIN || userRole === requiredRole) {
+      console.log(userRole);
+
+      if (userRole === ROLE.ADMIN) {
         return next();
       }
 
-      const error = handleErrors(
-        "Access not allowed, you don't have the required permission",
-        401
-      );
-      next(error);
+      if (userRole !== requiredRole) {
+        const error = new HttpError(
+          "Access not allowed, you don't have the required permission",
+          401
+        );
+        return next(error);
+      }
+
+      return next();
     } catch (error) {
-      next(handleErrors('There is an error', 500));
+      next(new HttpError('There is an error', 500));
     }
   };

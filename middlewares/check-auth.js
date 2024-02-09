@@ -23,6 +23,7 @@ module.exports = (req, res, next) => {
       username: decodedToken.username,
       role: decodedToken.role,
     };
+
     next();
   } catch (err) {
     const error = new HttpError('Authentication faild!', 403);
