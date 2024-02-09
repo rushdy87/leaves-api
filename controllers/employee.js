@@ -15,9 +15,9 @@ exports.getEmployeeById = async (req, res, next) => {
   } catch (error) {
     return next(
       new HttpError(
-        'Something went wrong, could not find the employee right now.'
-      ),
-      500
+        'Something went wrong, could not find the employee right now.',
+        500
+      )
     );
   }
 };

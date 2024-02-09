@@ -2,20 +2,22 @@ const expres = require('express');
 
 const employeesController = require('../controllers/employee');
 const checkAuth = require('../middlewares/check-auth');
+const checkRole = require('../middlewares/check-role');
+const { ROLE } = require('../util/roles');
 
 const router = expres.Router();
 
 router.use(checkAuth);
 
-router.get('/:id', employeesController.getEmployeeById);
+router.get('/:id', checkRole(ROLE.ADMIN), employeesController.getEmployeeById);
 
-router.get('/names/:name', employeesController.getEmployeesByName);
+router.get('/names/:name', checkRole(), employeesController.getEmployeesByName);
 
-router.get('/', employeesController.getAllEmployees);
+router.get('/', checkRole(), employeesController.getAllEmployees);
 
-router.post('/', employeesController.addEmployee);
+router.post('/', checkRole(), employeesController.addEmployee);
 
-router.put('/:id', employeesController.updateEmployee);
+router.put('/:id', checkRole(), employeesController.updateEmployee);
 
-router.delete('/:id', employeesController.deleteEmployee);
+router.delete('/:id', checkRole(), employeesController.deleteEmployee);
 module.exports = router;

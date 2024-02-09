@@ -18,7 +18,11 @@ module.exports = (req, res, next) => {
     }
 
     const decodedToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY); // return { userId, username }
-    req.userData = { userId: decodedToken.userId };
+    req.userData = {
+      id: decodedToken.userId,
+      username: decodedToken.username,
+      role: decodedToken.role,
+    };
     next();
   } catch (err) {
     const error = new HttpError('Authentication faild!', 403);
