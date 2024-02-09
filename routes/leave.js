@@ -2,26 +2,48 @@ const expres = require('express');
 
 const leaveController = require('../controllers/leave');
 const checkAuth = require('../middlewares/check-auth');
+const checkRole = require('../middlewares/check-role');
+const { ROLE } = require('../util/roles');
 
 const router = expres.Router();
 
 router.use(checkAuth);
 
-router.post('/', leaveController.addLeave);
+router.post('/', checkRole(), leaveController.addLeave);
 
-router.get('/', leaveController.getAllLeaves);
+router.get('/', checkRole(), leaveController.getAllLeaves);
 
-router.get('/waiting-leaves', leaveController.getWaitingLeaves);
+router.get('/waiting-leaves', checkRole(), leaveController.getWaitingLeaves);
 
-router.put('/:id', leaveController.updateLeave);
+router.put('/:id', checkRole(), leaveController.updateLeave);
 
-// ذني للمانجر ليفل بس..
-router.put('/print/send-to-print/:id', leaveController.sendToPrint);
-router.put('/print/send-all-to-print', leaveController.sendAllToPrint);
-router.put('/print/rejecte-leave/:id', leaveController.rejecteLeave);
+// Admin Role
+router.put(
+  '/print/send-to-print/:id',
+  checkRole(ROLE.ADMIN),
+  leaveController.sendToPrint
+);
+router.put(
+  '/print/send-all-to-print',
+  checkRole(ROLE.ADMIN),
+  leaveController.sendAllToPrint
+);
+router.put(
+  '/print/rejecte-leave/:id',
+  checkRole(ROLE.ADMIN),
+  leaveController.rejecteLeave
+);
 
 // after print
-router.put('/print/printing-leave/:id', leaveController.printingLeave);
-router.put('/print/printing-all-leaves', leaveController.printingAllLeave);
+router.put(
+  '/print/printing-leave/:id',
+  checkRole(),
+  leaveController.printingLeave
+);
+router.put(
+  '/print/printing-all-leaves',
+  checkRole(),
+  leaveController.printingAllLeave
+);
 
 module.exports = router;

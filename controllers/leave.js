@@ -126,8 +126,6 @@ exports.sendAllToPrint = async (req, res, next) => {
   try {
     const leaves = await Leave.findAll({ where: { status: 'wait' } });
 
-    console.log(leaves);
-
     if (leaves.length === 0) {
       return next(new HttpError('There is no leave right now.'), 404);
     }

@@ -4,11 +4,8 @@ const HttpError = require('../models/http-error');
 module.exports =
   (requiredRole = ROLE.BASIC) =>
   (req, res, next) => {
-    console.log(requiredRole);
     try {
       const userRole = +req.userData.role;
-
-      console.log(userRole);
 
       if (userRole === ROLE.ADMIN) {
         return next();
